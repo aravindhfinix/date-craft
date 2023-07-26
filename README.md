@@ -1,6 +1,6 @@
 # date-craft.js
 
-[![npm version](https://badge.fury.io/js/date-craft.svg)](https://badge.fury.io/js/date-craft)
+[![npm version](https://img.shields.io/npm/v/date-craft.svg)](https://www.npmjs.com/package/date-craft)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 `date-craft` is a Node.js module which can act as an subsitute for moment.js that provides various utility functions to work with dates and times. It offers a range of functionalities to manipulate, format, and compare dates and times.
