@@ -127,7 +127,7 @@ function isLeapYear(year) {
 function getDaysInMonth(year, month) {
     return new Date(year, month + 1, 0).getDate();
 }
-function formatHumanReadable(date) {
+function humanReadableFormat(date) {
     const options = {
         year: 'numeric',
         month: 'long',
@@ -230,7 +230,7 @@ module.exports = {
     getUnixTimestamp,
     isLeapYear,
     getDaysInMonth,
-    formatHumanReadable,
+    humanReadableFormat,
     getStartOfWeek,
     getEndOfWeek,
     toDateObject,

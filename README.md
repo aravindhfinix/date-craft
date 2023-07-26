@@ -299,7 +299,7 @@ const month = 1; // January is 0-based (0-11)
 console.log(dateCraft.getDaysInMonth(year, month)); // Output: 31
 ```
 
-### `dateCraft.formatHumanReadable(date)`
+### `dateCraft.humanReadableFormat(date)`
 
 Formats a `Date` object in a human-readable format with date and time.
 
@@ -307,7 +307,7 @@ Formats a `Date` object in a human-readable format with date and time.
 
 ```javascript
 const currentDate = new Date();
-const formattedDate = dateCraft.formatHumanReadable(currentDate);
+const formattedDate = dateCraft.humanReadableFormat(currentDate);
 
 console.log(formattedDate); // Output: July 25, 2023, 07:30:00 AM
 ```
