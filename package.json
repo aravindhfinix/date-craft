@@ -1,5 +1,5 @@
 {
-  "name": "time-craft",
+  "name": "date-craft",
   "version": "1.0.0",
   "description": "an package to do date and time functions",
   "main": "index.js",
@@ -14,6 +14,8 @@
     "time",
     "date",
     "moment",
+    "parse",
+    "validate",
     "period",
     "age",
     "node",
