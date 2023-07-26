@@ -1,4 +1,4 @@
-const dateUtils = require('./index.js');
+const dateUtils = require('./dist/index');
 
 describe('dateUtils', () => {
   describe('getCurrentDate', () => {

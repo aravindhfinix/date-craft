@@ -3,30 +3,30 @@ function getCurrentDate() {
     return new Date();
 }
 
-function isValidDate(date) {
+function isValidDate(date: Date): boolean {
     return !isNaN(date.getTime());
 }
 
-function parseDate(dateStr) {
+function parseDate(dateStr: string): Date {
     const [year, month, day] = dateStr.split('-').map(Number);
     return new Date(year, month - 1, day); // Note: months are 0-based in Date objects
 }
 
 
-function formatDate(date, format) {
+function formatDate(date: Date, format: string): string {
     const monthNames = [
         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
 
-    const formatTokens = {
+    const formatTokens: { [key: string]: string | number } = {
         'MMMM': date.toLocaleString(undefined, { month: 'long' }),
         'MMM': monthNames[date.getMonth()],
         'MM': String(date.getMonth() + 1).padStart(2, '0'),
         'M': String(date.getMonth() + 1),
         'DDDD': date.toLocaleString(undefined, { weekday: 'long' }),
         'DD': String(date.getDate()).padStart(2, '0'),
-        'Do': String(date.getDate()) + getOrdinalSuffix(String(date.getDate())),
+        'Do': String(date.getDate()) + getOrdinalSuffix(date.getDate()),
         'D': String(date.getDate()),
         'YYYY': date.getFullYear(),
         'YY': date.getFullYear().toString().slice(-2),
@@ -36,10 +36,10 @@ function formatDate(date, format) {
         'm': String(date.getMinutes()),
         'ss': String(date.getSeconds()).padStart(2, '0'),
         's': String(date.getSeconds()),
-        'a': date.toLocaleString(undefined, { hour12: true, hour: 'numeric' }).match(/\s(.*)$/)[1],
+        'a': (date.toLocaleString(undefined, { hour12: true, hour: 'numeric' }).match(/\s(.*)$/) || [])[1] || '',
     };
 
-    function getOrdinalSuffix(day) {
+    function getOrdinalSuffix(day: number): string {
         if (day >= 11 && day <= 13) {
             return 'th';
         }
@@ -52,95 +52,91 @@ function formatDate(date, format) {
     }
 
     const regex = new RegExp(Object.keys(formatTokens).join('|'), 'g');
-    const formattedString = format.replace(regex, (match) => formatTokens[match]);
+    const formattedString = format.replace(regex, (match: string) => formatTokens[match] as string);
     return formattedString;
 }
 
 
-function formatDatefun() {
-    const date = new Date('2023-07-03');
-    const formattedDate = formatDate(date, 'MMM Do, YYYY');
-    console.log(formattedDate)
-};
 
-function addDays(date, daysToAdd) {
+
+function addDays(date: Date, daysToAdd: number): Date {
     const newDate = new Date(date);
     newDate.setDate(newDate.getDate() + daysToAdd);
     return newDate;
 }
 
-function subtractDays(date, daysToSubtract) {
+function subtractDays(date: Date, daysToSubtract: number): Date {
     return addDays(date, -daysToSubtract);
 }
 
-function getStartOfDay(date) {
+function getStartOfDay(date: Date): Date {
     const newDate = new Date(date);
     newDate.setHours(0, 0, 0, 0);
     return newDate;
 }
 
-function getEndOfDay(date) {
+function getEndOfDay(date: Date): Date {
     const newDate = new Date(date);
     newDate.setHours(23, 59, 59, 999);
     return newDate;
 }
 
-function diffInDays(start, end) {
+function diffInDays(start: Date, end: Date): number {
     const oneDayInMillis = 24 * 60 * 60 * 1000;
     const startTimestamp = start.getTime();
     const endTimestamp = end.getTime();
     return Math.round((endTimestamp - startTimestamp) / oneDayInMillis);
 }
 
-function isBeforeDate(date1, date2) {
+function isBeforeDate(date1: Date, date2: Date): boolean {
     return date1.getTime() < date2.getTime();
 }
 
-function isAfterDate(date1, date2) {
+function isAfterDate(date1: Date, date2: Date): boolean {
     return date1.getTime() > date2.getTime();
 }
 
-function isSameDate(date1, date2) {
+function isSameDate(date1: Date, date2: Date): boolean {
     return date1.toISOString() === date2.toISOString();
 }
 
-function isSameOrBeforeDate(date1, date2) {
+function isSameOrBeforeDate(date1: Date, date2: Date): boolean {
     return date1.toISOString() <= date2.toISOString();
 }
 
-function isSameOrAfterDate(date1, date2) {
+function isSameOrAfterDate(date1: Date, date2: Date): boolean {
     return date1.toISOString() >= date2.toISOString();
 }
 
-function cloneDate(date) {
+function cloneDate(date: Date): Date {
     return new Date(date);
 }
 
-function getUnixTimestamp(date) {
+function getUnixTimestamp(date: Date): number {
     return Math.floor(date.getTime() / 1000);
 }
 
-function isLeapYear(year) {
+function isLeapYear(year: number): boolean {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 }
 
-function getDaysInMonth(year, month) {
+function getDaysInMonth(year: number, month: number): number {
     return new Date(year, month + 1, 0).getDate();
 }
-function humanReadableFormat(date) {
-    const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        hour12: false,
-    };
-    return date.toLocaleString(undefined, options);
+
+function humanReadableFormat(date: Date): string {
+    const year = date.getFullYear();
+    const month = date.toLocaleString(undefined, { month: 'long' });
+    const day = date.getDate();
+    const hour = date.getHours().toString().padStart(2, '0');
+    const minute = date.getMinutes().toString().padStart(2, '0');
+    const second = date.getSeconds().toString().padStart(2, '0');
+
+    return `${month} ${day}, ${year} ${hour}:${minute}:${second}`;
 }
 
-function getStartOfWeek(date) {
+
+function getStartOfWeek(date: Date): Date {
     const newDate = new Date(date);
     const dayOfWeek = newDate.getDay();
     const diff = newDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
@@ -149,29 +145,37 @@ function getStartOfWeek(date) {
     return newDate;
 }
 
-function getEndOfWeek(date) {
+function getEndOfWeek(date: Date): Date {
     const newDate = getStartOfWeek(date);
     newDate.setDate(newDate.getDate() + 6);
     newDate.setHours(23, 59, 59, 999);
     return newDate;
 }
-function toDateObject(dateStr) {
+function toDateObject(dateStr: string): Date {
     return new Date(dateStr);
 }
 
 // Function to convert a local date to UTC date
-function convertLocalToUTC(date) {
+function convertLocalToUTC(date: Date): Date {
     const timezoneOffsetInMinutes = date.getTimezoneOffset();
     return new Date(date.getTime() + timezoneOffsetInMinutes * 60 * 1000);
 }
 
 // Function to convert a UTC date to local date
-function convertUTCToLocal(utcDate) {
+function convertUTCToLocal(utcDate: Date): Date {
     const timezoneOffsetInMinutes = utcDate.getTimezoneOffset();
     return new Date(utcDate.getTime() - timezoneOffsetInMinutes * 60 * 1000);
 }
 
-function getCurrentDayTimeYear() {
+function getCurrentDayTimeYear(): {
+    day: number;
+    month: number;
+    year: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+    milliseconds: number;
+} {
     const currentDate = new Date();
 
     const currentDay = currentDate.getDate(); // Get the current day of the month (1-31)
@@ -194,7 +198,7 @@ function getCurrentDayTimeYear() {
     };
 }
 
-function calculateAge(dateOfBirth) {
+function calculateAge(dateOfBirth: string): number {
     const birthDate = new Date(dateOfBirth);
     const currentDate = new Date();
 
@@ -207,8 +211,6 @@ function calculateAge(dateOfBirth) {
 
     return age;
 }
-
-formatDatefun()
 
 // Export all the utility functions as a module
 module.exports = {
