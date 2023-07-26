@@ -1,0 +1,47 @@
+{
+  "name": "time-craft",
+  "version": "1.0.0",
+  "description": "an package to do date and time functions",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aravindhfinix/date-craft.git"
+  },
+  "keywords": [
+    "time",
+    "date",
+    "moment",
+    "period",
+    "age",
+    "node",
+    "chrono",
+    "calander",
+    "month",
+    "year",
+    "week",
+    "start-time",
+    "end-time",
+    "time-differance",
+    "time-calculate",
+    "era",
+    "day",
+    "momemtjs",
+    "datepicker",
+    "watch",
+    "clock",
+    "seconds",
+    "minute"
+  ],
+  "author": "aravindh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aravindhfinix/date-craft/issues"
+  },
+  "homepage": "https://github.com/aravindhfinix/date-craft#readme",
+  "devDependencies": {
+    "jest": "^29.6.1"
+  }
+}
