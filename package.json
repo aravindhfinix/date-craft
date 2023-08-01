@@ -1,6 +1,6 @@
 {
   "name": "date-craft",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "an package to do date and time functions",
   "main": "index.js",
   "scripts": {
