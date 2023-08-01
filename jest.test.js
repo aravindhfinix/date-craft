@@ -1,4 +1,4 @@
-const dateUtils = require('./dist/index');
+const dateUtils = require('./index');
 
 describe('dateUtils', () => {
   describe('getCurrentDate', () => {
@@ -29,16 +29,20 @@ describe('dateUtils', () => {
   });
 
   describe('formatDate', () => {
-    test('formats the date correctly (YYYY-MM-DD)', () => {
-      const date = new Date('2023-07-26');
-      const formattedDate = dateUtils.formatDate(date, 'YYYY-MM-DD');
-      expect(formattedDate).toBe('2023-07-26');
+    it('should format the date correctly', () => {
+      const customDate = new Date("2023-09-15");
+      const formattedDate = dateUtils.formatDate(customDate).format("MMMM DD, YYYY");
+      expect(formattedDate).toEqual("September 15, 2023");
     });
 
-    test('formats the date correctly (MMM Do, YYYY)', () => {
+    test('formats the date correctly (YYYY-MM-DD)', () => {
       const date = new Date('2023-07-26');
-      const formattedDate = dateUtils.formatDate(date, 'MMM Do, YYYY');
+      const formattedDate = dateUtils.formatDate(date).format('MMM Do, YYYY');
       expect(formattedDate).toBe('Jul 26th, 2023');
+    });
+    it('should format the provided date string correctly', () => {
+      const formattedDate = dateUtils.formatDate("2023-12-25").format("MMM D, YYYY");
+      expect(formattedDate).toEqual("Dec 25, 2023");
     });
   });
 
@@ -98,27 +102,27 @@ describe('dateUtils', () => {
   });
 
 
-describe('isAfterDate', () => {
+  describe('isAfterDate', () => {
     test('returns true when the first date is after the second', () => {
       const date1 = new Date('2023-07-28');
       const date2 = new Date('2023-07-27');
       expect(dateUtils.isAfterDate(date1, date2)).toBe(true);
     });
-  
+
     test('returns false when the first date is before the second', () => {
       const date1 = new Date('2023-07-26');
       const date2 = new Date('2023-07-27');
       expect(dateUtils.isAfterDate(date1, date2)).toBe(false);
     });
   });
-  
+
   describe('isSameDate', () => {
     test('returns true when the two dates are the same', () => {
       const date1 = new Date('2023-07-26');
       const date2 = new Date('2023-07-26');
       expect(dateUtils.isSameDate(date1, date2)).toBe(true);
     });
-  
+
     test('returns false when the two dates are different', () => {
       const date1 = new Date('2023-07-26');
       const date2 = new Date('2023-07-27');

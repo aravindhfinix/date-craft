@@ -12,34 +12,50 @@ function parseDate(dateStr: string): Date {
     return new Date(year, month - 1, day); // Note: months are 0-based in Date objects
 }
 
+class DateFormatter {
+    private date: Date;
+    public formatTokens: { [key: string]: string | number }; // Declare formatTokens as a public property
 
-function formatDate(date: Date, format: string): string {
-    const monthNames = [
+    constructor(date?: Date | string) {
+        if (date instanceof Date) {
+            this.date = date;
+        } else if (typeof date === "string") {
+            this.date = new Date(date);
+        } else {
+            this.date = new Date();
+        }
+
+        this.initializeFormatTokens(); // Initialize formatTokens after date has been set
+    }
+
+    private initializeFormatTokens(): void {
+        this.formatTokens = {
+            'MMMM': this.date.toLocaleString(undefined, { month: 'long' }),
+            'MMM': this.monthNames[this.date.getMonth()],
+            'MM': String(this.date.getMonth() + 1).padStart(2, '0'),
+            'M': String(this.date.getMonth() + 1),
+            'DDDD': this.date.toLocaleString(undefined, { weekday: 'long' }),
+            'DD': String(this.date.getDate()).padStart(2, '0'),
+            'Do': String(this.date.getDate()) + this.getOrdinalSuffix(this.date.getDate()),
+            'D': String(this.date.getDate()),
+            'YYYY': this.date.getFullYear(),
+            'YY': this.date.getFullYear().toString().slice(-2),
+            'hh': String(this.date.getHours()).padStart(2, '0'),
+            'h': String(this.date.getHours()),
+            'mm': String(this.date.getMinutes()).padStart(2, '0'),
+            'm': String(this.date.getMinutes()),
+            'ss': String(this.date.getSeconds()).padStart(2, '0'),
+            's': String(this.date.getSeconds()),
+            'a': (this.date.toLocaleString(undefined, { hour12: true, hour: 'numeric' }).match(/\s(.*)$/) || [])[1] || '',
+        };
+    }
+
+    private monthNames = [
         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
 
-    const formatTokens: { [key: string]: string | number } = {
-        'MMMM': date.toLocaleString(undefined, { month: 'long' }),
-        'MMM': monthNames[date.getMonth()],
-        'MM': String(date.getMonth() + 1).padStart(2, '0'),
-        'M': String(date.getMonth() + 1),
-        'DDDD': date.toLocaleString(undefined, { weekday: 'long' }),
-        'DD': String(date.getDate()).padStart(2, '0'),
-        'Do': String(date.getDate()) + getOrdinalSuffix(date.getDate()),
-        'D': String(date.getDate()),
-        'YYYY': date.getFullYear(),
-        'YY': date.getFullYear().toString().slice(-2),
-        'hh': String(date.getHours()).padStart(2, '0'),
-        'h': String(date.getHours()),
-        'mm': String(date.getMinutes()).padStart(2, '0'),
-        'm': String(date.getMinutes()),
-        'ss': String(date.getSeconds()).padStart(2, '0'),
-        's': String(date.getSeconds()),
-        'a': (date.toLocaleString(undefined, { hour12: true, hour: 'numeric' }).match(/\s(.*)$/) || [])[1] || '',
-    };
-
-    function getOrdinalSuffix(day: number): string {
+    private getOrdinalSuffix(day: number): string {
         if (day >= 11 && day <= 13) {
             return 'th';
         }
@@ -51,13 +67,16 @@ function formatDate(date: Date, format: string): string {
         }
     }
 
-    const regex = new RegExp(Object.keys(formatTokens).join('|'), 'g');
-    const formattedString = format.replace(regex, (match: string) => formatTokens[match] as string);
-    return formattedString;
+    public format(format: string): string {
+        const regex = new RegExp(Object.keys(this.formatTokens).join('|'), 'g');
+        const formattedString = format.replace(regex, (match: string) => this.formatTokens[match] as string);
+        return formattedString;
+    }
 }
 
-
-
+function formatDate(date?: Date | string): DateFormatter {
+    return new DateFormatter(date);
+}
 
 function addDays(date: Date, daysToAdd: number): Date {
     const newDate = new Date(date);
