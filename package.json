@@ -35,7 +35,11 @@
     "watch",
     "clock",
     "seconds",
-    "minute"
+    "minute",
+    "datecraft",
+    "date-craft",
+    "craft-date",
+    "craft"
   ],
   "author": "aravindh",
   "license": "MIT",
