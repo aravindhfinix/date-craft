@@ -43,3 +43,5 @@ declare function getCurrentDayTimeYear(): {
     milliseconds: number;
 };
 declare function calculateAge(dateOfBirth: string): number;
+declare function getTimeInTimeZoneAsDateObject(timeZone: string): Date;
+declare function getTimeInTimeZone(timeZone: string): string;

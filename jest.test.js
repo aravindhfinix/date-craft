@@ -129,4 +129,127 @@ describe('dateUtils', () => {
       expect(dateUtils.isSameDate(date1, date2)).toBe(false);
     });
   });
+
+  describe('getTimeInTimeZone', () => {
+    test('returns the current time in the specified timezone as a string', () => {
+      const timeZone = 'America/New_York';
+      const currentTime = dateUtils.getTimeInTimeZone(timeZone);
+      expect(typeof currentTime).toBe('string');
+    });
+
+    test('returns the correct time in India time zone', () => {
+      const timeZone = 'Asia/Kolkata';
+      const currentTime = dateUtils.getTimeInTimeZone(timeZone);
+      expect(typeof currentTime).toBe('string');
+      expect(currentTime).toMatch(/\d{2}\/\d{2}\/\d{4}, \d{2}:\d{2}:\d{2}/);
+    });
+  });
+
+  describe('getTimeInTimeZoneAsDateObject', () => {
+    test('returns a Date object in the specified timezone', () => {
+      const timeZone = 'America/New_York';
+      const timeInNY = dateUtils.getTimeInTimeZoneAsDateObject(timeZone);
+      expect(timeInNY).toBeInstanceOf(Date);
+    });
+
+    test('returns correct Date object for India time zone', () => {
+      const timeZone = 'Asia/Kolkata';
+      const timeInKolkata = dateUtils.getTimeInTimeZoneAsDateObject(timeZone);
+      expect(timeInKolkata).toBeInstanceOf(Date);
+    });
+  });
+
+  describe('isSameOrBeforeDate', () => {
+    test('returns true when the first date is the same as the second', () => {
+      const date1 = new Date('2023-07-26');
+      const date2 = new Date('2023-07-26');
+      expect(dateUtils.isSameOrBeforeDate(date1, date2)).toBe(true);
+    });
+
+    test('returns true when the first date is before the second', () => {
+      const date1 = new Date('2023-07-25');
+      const date2 = new Date('2023-07-26');
+      expect(dateUtils.isSameOrBeforeDate(date1, date2)).toBe(true);
+    });
+
+    test('returns false when the first date is after the second', () => {
+      const date1 = new Date('2023-07-27');
+      const date2 = new Date('2023-07-26');
+      expect(dateUtils.isSameOrBeforeDate(date1, date2)).toBe(false);
+    });
+  });
+
+  describe('isSameOrAfterDate', () => {
+    test('returns true when the first date is the same as the second', () => {
+      const date1 = new Date('2023-07-26');
+      const date2 = new Date('2023-07-26');
+      expect(dateUtils.isSameOrAfterDate(date1, date2)).toBe(true);
+    });
+
+    test('returns true when the first date is after the second', () => {
+      const date1 = new Date('2023-07-27');
+      const date2 = new Date('2023-07-26');
+      expect(dateUtils.isSameOrAfterDate(date1, date2)).toBe(true);
+    });
+
+    test('returns false when the first date is before the second', () => {
+      const date1 = new Date('2023-07-25');
+      const date2 = new Date('2023-07-26');
+      expect(dateUtils.isSameOrAfterDate(date1, date2)).toBe(false);
+    });
+  });
+
+  describe('cloneDate', () => {
+    test('clones the given date correctly', () => {
+      const originalDate = new Date('2023-07-26');
+      const clonedDate = dateUtils.cloneDate(originalDate);
+      expect(clonedDate).toEqual(originalDate);
+      expect(clonedDate).not.toBe(originalDate); // Ensure it's a different instance
+    });
+  });
+
+  describe('convertLocalToUTC', () => {
+    test('converts the local date to UTC correctly', () => {
+      const localDate = new Date('2023-07-26T10:00:00'); // Adjust according to your local timezone
+      const utcDate = dateUtils.convertLocalToUTC(localDate);
+      expect(utcDate.toISOString()).toBe('2023-07-26T10:00:00.000Z'); // Adjust based on your expected UTC
+    });
+  });
+
+  describe('convertUTCToLocal', () => {
+    test('converts the UTC date to local date correctly', () => {
+      const utcDate = new Date('2023-07-26T10:00:00.000Z'); // UTC time
+      const localDate = dateUtils.convertUTCToLocal(utcDate);
+      expect(localDate.toISOString()).toEqual(new Date('2023-07-26T10:00:00').toISOString()); // Adjust this as well
+    });
+  });
+
+
+  describe('humanReadableFormat', () => {
+    test('returns a human-readable date string', () => {
+      const date = new Date('2023-07-26');
+      const formatted = dateUtils.humanReadableFormat(date);
+      expect(formatted).toBe('Wednesday, July 26, 2023');
+    });
+  });
+
+  describe('getUnixTimestamp', () => {
+    test('returns the correct Unix timestamp for a given date', () => {
+      const date = new Date('2023-07-26T10:00:00');
+      const timestamp = dateUtils.getUnixTimestamp(date);
+      expect(timestamp).toBe(Math.floor(date.getTime() / 1000));
+    });
+  });
+
+  describe('calculateAge', () => {
+    test('calculates age correctly based on date of birth', () => {
+      const dateOfBirth = '1990-01-01';
+      const age = dateUtils.calculateAge(dateOfBirth);
+      const currentYear = new Date().getFullYear();
+      expect(age).toBe(currentYear - 1990);
+    });
+  });
+
 });
+
+

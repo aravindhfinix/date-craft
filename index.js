@@ -85,10 +85,10 @@ function getEndOfDay(date) {
     return newDate;
 }
 function diffInDays(start, end) {
-    const oneDayInMillis = 24 * 60 * 60 * 1000;
+    const oneDayInMilliSeconds = 24 * 60 * 60 * 1000;
     const startTimestamp = start.getTime();
     const endTimestamp = end.getTime();
-    return Math.round((endTimestamp - startTimestamp) / oneDayInMillis);
+    return Math.round((endTimestamp - startTimestamp) / oneDayInMilliSeconds);
 }
 function isBeforeDate(date1, date2) {
     return date1.getTime() < date2.getTime();
@@ -118,14 +118,10 @@ function getDaysInMonth(year, month) {
     return new Date(year, month + 1, 0).getDate();
 }
 function humanReadableFormat(date) {
-    const year = date.getFullYear();
-    const month = date.toLocaleString(undefined, { month: 'long' });
-    const day = date.getDate();
-    const hour = date.getHours().toString().padStart(2, '0');
-    const minute = date.getMinutes().toString().padStart(2, '0');
-    const second = date.getSeconds().toString().padStart(2, '0');
-    return `${month} ${day}, ${year} ${hour}:${minute}:${second}`;
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
 }
+
 function getStartOfWeek(date) {
     const newDate = new Date(date);
     const dayOfWeek = newDate.getDay();
@@ -143,16 +139,17 @@ function getEndOfWeek(date) {
 function toDateObject(dateStr) {
     return new Date(dateStr);
 }
-// Function to convert a local date to UTC date
-function convertLocalToUTC(date) {
-    const timezoneOffsetInMinutes = date.getTimezoneOffset();
-    return new Date(date.getTime() + timezoneOffsetInMinutes * 60 * 1000);
+
+function convertLocalToUTC(localDate) {
+    // Convert local date to UTC by subtracting the timezone offset
+    return new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
 }
-// Function to convert a UTC date to local date
+
 function convertUTCToLocal(utcDate) {
-    const timezoneOffsetInMinutes = utcDate.getTimezoneOffset();
-    return new Date(utcDate.getTime() - timezoneOffsetInMinutes * 60 * 1000);
+    // Convert UTC date to local date by adding the timezone offset
+    return new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * 60000);
 }
+
 function getCurrentDayTimeYear() {
     const currentDate = new Date();
     const currentDay = currentDate.getDate(); // Get the current day of the month (1-31)
@@ -182,6 +179,54 @@ function calculateAge(dateOfBirth) {
     }
     return age;
 }
+
+function getTimeInTimeZoneAsDateObject(timeZone) {
+    const currentDate = new Date();
+
+    // Get the date and time in the specified time zone, including the offset
+    const options = {
+        timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+    };
+    const formatter = new Intl.DateTimeFormat('en-GB', options);
+    const formattedDate = formatter.format(currentDate);
+
+    // Reformat the date and time to ISO format
+    const [datePart, timePart] = formattedDate.split(', ');
+    const [day, month, year] = datePart.split('/');
+    const [hour, minute, second] = timePart.split(':');
+
+    // Create a Date object based on the ISO 8601 string with local time and no timezone shift
+    const isoDate = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
+
+    return isoDate;
+}
+
+
+function getTimeInTimeZone(timeZone) {
+    const currentDate = new Date();
+    const options = {
+        timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+    };
+    const formatter = new Intl.DateTimeFormat([], options);
+    const formattedDate = formatter.format(currentDate);
+
+    return formattedDate;
+}
+
 // Export all the utility functions as a module
 module.exports = {
     getCurrentDate,
@@ -209,5 +254,7 @@ module.exports = {
     convertLocalToUTC,
     convertUTCToLocal,
     getCurrentDayTimeYear,
-    calculateAge
+    calculateAge,
+    getTimeInTimeZoneAsDateObject,
+    getTimeInTimeZone
 };
